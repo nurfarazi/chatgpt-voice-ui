@@ -1,0 +1,9 @@
+node_modules
+dist
+.turbo
+.vite
+releases
+*.log
+*.zip
+coverage
+temp

@@ -1,0 +1,69 @@
+:root {
+  --codex-bg: #0f172a;
+  --codex-fg: #f8fafc;
+  --codex-accent: #38bdf8;
+  --codex-muted: #1e293b;
+  --codex-font-family: 'Inter', system-ui, sans-serif;
+  --codex-font-size: 15px;
+  --codex-line-height: 1.6;
+  --codex-letter-spacing: 0.01em;
+  --codex-border-radius: 12px;
+  --codex-gutter: 18px;
+  --codex-input-height: 54px;
+  --codex-sidebar-width: 240px;
+  --codex-background-type: color;
+  --codex-background-value: #0f172a;
+  --codex-background-blur: 0px;
+  --codex-background-opacity: 1;
+}
+
+html.codex-theme-active body {
+  background: var(--codex-background-value);
+  color: var(--codex-fg);
+  font-family: var(--codex-font-family);
+  font-size: var(--codex-font-size);
+  line-height: var(--codex-line-height);
+  letter-spacing: var(--codex-letter-spacing);
+}
+
+html.codex-theme-active body * {
+  font-family: inherit;
+  letter-spacing: inherit;
+}
+
+html.codex-theme-active [data-testid='left-nav'],
+html.codex-theme-active nav[aria-label='ChatGPT sidebar'],
+html.codex-theme-active aside {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+html[data-codex-sidebar-collapsed] .grid > aside,
+html[data-codex-sidebar-collapsed] [data-testid='left-nav'],
+html[data-codex-sidebar-collapsed] nav[aria-label='ChatGPT sidebar'],
+html[data-codex-sidebar-collapsed] aside {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-20px);
+}
+
+html.codex-theme-active [data-testid='conversation-turns'] {
+  backdrop-filter: blur(var(--codex-background-blur));
+}
+
+html.codex-theme-active [data-testid='conversation-turns'] > div {
+  border-radius: var(--codex-border-radius);
+}
+
+html.codex-theme-active textarea,
+html.codex-theme-active [role='textbox'] {
+  min-height: var(--codex-input-height) !important;
+  border-radius: calc(var(--codex-border-radius) - 4px) !important;
+}
+
+html.codex-theme-active button {
+  border-radius: calc(var(--codex-border-radius) - 6px) !important;
+}
+
+html.codex-theme-active .sticky.bottom-0 {
+  padding-bottom: calc(var(--codex-gutter) * 1.5);
+}

@@ -1,0 +1,52 @@
+{
+  "name": "chatgpt-voice-ui",
+  "version": "0.1.0",
+  "description": "Chrome extension that personalizes the ChatGPT UI with themes, personas, and voice-first enhancements.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "rimraf dist .turbo .vite",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint \"{src,scripts}/**/*.{ts,tsx}\" --max-warnings=0",
+    "test": "vitest",
+    "format": "prettier --write \"{src,docs}/**/*.{ts,tsx,js,json,css,md}\"",
+    "pack": "npm run build && node scripts/pack-extension.mjs"
+  },
+  "keywords": [
+    "chrome-extension",
+    "chatgpt",
+    "personalization",
+    "voice"
+  ],
+  "author": "ChatGPT UI Personalization Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.25",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.0",
+    "@types/chrome": "^0.0.277",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^8.9.0",
+    "@typescript-eslint/parser": "^8.9.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^9.11.1",
+    "eslint-plugin-react": "^7.37.1",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "adm-zip": "^0.5.10",
+    "jsdom": "^24.1.0",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.9",
+    "vitest": "^1.6.0"
+  }
+}
