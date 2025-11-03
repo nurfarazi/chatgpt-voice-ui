@@ -1,9 +1,10 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import AdmZip from 'adm-zip';
 
-const rootDir = path.resolve(new URL('.', import.meta.url).pathname, '..');
-const projectDir = path.resolve(rootDir, '..');
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const projectDir = path.resolve(scriptDir, '..');
 const distDir = path.join(projectDir, 'dist');
 const releasesDir = path.join(projectDir, 'releases');
 

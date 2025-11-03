@@ -12,20 +12,48 @@ Chrome extension that restyles and personalizes the ChatGPT workspace with confi
 
 ### Getting Started
 
+Install dependencies and start the watcher:
+
 ```bash
 npm install
 npm run dev
 ```
 
-The dev server rebuilds the extension. Load `dist` as an unpacked extension in Chrome.
+The dev server writes fresh bundles into `dist/`.
 
-### Scripts
+#### Load the unpacked extension
+
+1. Open Chrome and visit `chrome://extensions`.
+2. Toggle on **Developer mode** (top right).
+3. Click **Load unpacked** and select the `dist/` directory.
+4. (Optional) Pin *ChatGPT UI Personalizer* to the toolbar for quick persona switching.
+
+#### Available scripts
 
 - `npm run dev` – Vite watch build for the extension.
 - `npm run build` – Production bundle.
 - `npm run lint` – ESLint over `src` and `scripts`.
-- `npm run test` – Placeholder test runner (configure Vitest suites as features grow).
+- `npm run test` – Vitest suites (extend as voice features evolve).
 - `npm run pack` – Zip the built extension into `releases/`.
+
+### Testing Voice Mode
+
+Follow these steps to exercise the voice-first flow the extension is designed around:
+
+1. **Confirm ChatGPT voice access**  
+   Make sure your ChatGPT account has voice conversations enabled (Open the site menu -> *Voice mode*; if you don't see it, request access in ChatGPT's settings or beta programs).
+2. **Launch the extension alongside ChatGPT**  
+   With `npm run dev` running and the unpacked extension loaded, open `https://chatgpt.com/` (or `https://chat.openai.com/` if still on the legacy domain). Wait for the overlay badge in the top-right corner; this guarantees the content script is active.
+3. **Choose or adjust a voice persona**  
+   Click the toolbar icon -> pick a persona that lists a `Mic:` tag. In the Options page you can duplicate personas and change the `defaultVoice` (e.g., alloy, verse) to match the voice you want ChatGPT to use.
+4. **Grant microphone permissions**  
+   In ChatGPT, click the microphone / headset button. Chrome will prompt you the first time; allow microphone access so ChatGPT can capture audio.
+5. **Start a live voice chat**  
+   Hit “Start voice conversation” (desktop) or the large mic button (voice UI). Speak a prompt. The extension keeps the persona badge and theme synced so you can tell which configuration is applied while you talk.
+6. **Validate overlay controls**  
+   Use `Alt+N` / `Alt+Shift+N` to cycle personas mid-conversation, or open the overlay (`Toggle overlay` from the popup) to confirm the theme and layout updates without breaking the ChatGPT voice UI.
+7. **Optional debugging**  
+   Open DevTools -> Console to ensure no `codex` errors appear; if voice mode fails to launch, reload the tab and check the extension popup to confirm the active persona.
 
 ### Roadmap
 

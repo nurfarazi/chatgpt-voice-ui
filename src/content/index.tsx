@@ -1,3 +1,4 @@
+import './styles.css';
 import { createRoot, Root } from 'react-dom/client';
 import OverlayApp from './overlay';
 import overlayStyles from './overlay.css?inline';

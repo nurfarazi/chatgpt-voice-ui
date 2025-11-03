@@ -29,8 +29,7 @@ const manifest = defineManifest({
   content_scripts: [
     {
       matches: ['https://chat.openai.com/*', 'https://chatgpt.com/*'],
-      js: ['src/content/index.ts'],
-      css: ['src/content/styles.css'],
+      js: ['src/content/index.tsx'],
       run_at: 'document_idle',
     },
   ],
@@ -38,21 +37,21 @@ const manifest = defineManifest({
     'persona-next': {
       suggested_key: {
         default: 'Alt+N',
-        mac: 'Option+N',
+        mac: 'Alt+N',
       },
       description: 'Activate the next persona',
     },
     'persona-previous': {
       suggested_key: {
         default: 'Alt+Shift+N',
-        mac: 'Option+Shift+N',
+        mac: 'Alt+Shift+N',
       },
       description: 'Activate the previous persona',
     },
     'toggle-layout-overlay': {
       suggested_key: {
         default: 'Alt+L',
-        mac: 'Option+L',
+        mac: 'Alt+L',
       },
       description: 'Toggle personalization overlay',
     },
