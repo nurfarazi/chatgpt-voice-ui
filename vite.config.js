@@ -24,5 +24,10 @@ export default defineConfig({
     },
     server: {
         hmr: false,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, OPTIONS',
+            'Access-Control-Allow-Headers': '*',
+        },
     },
 });
