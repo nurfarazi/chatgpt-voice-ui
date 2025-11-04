@@ -2,6 +2,21 @@
 
 Chrome extension that restyles and personalizes the ChatGPT workspace with configurable personas, themes, and voice-first controls.
 
+### Why this matters
+
+- **Reduce cognitive load** by turning ChatGPT into a consistent, branded workspace instead of a generic text box. Each persona carries its own colors, typographic rhythm, and UI chrome, so switching between "research," "manager," or "creator" mode feels tangible.
+- **Level up live voice sessions** with a visual overlay that mirrors the active voice persona, mic hints, and shortcut badges—perfect for demos, podcasts, or co-working sessions where you want viewers to know which configuration is active.
+- **Accelerate experimentation** thanks to quick persona swapping, persistent defaults, and one-click rollbacks, making it easy to compare prompt framing or tone without dig-through settings.
+- **Extend ChatGPT** into niche workflows (teaching assistants, accessibility-first setups, content studios) by duplicating personas and wiring them to custom themes and voices.
+
+### Ideal use cases
+
+1. **Creators streaming or recording ChatGPT voice chats** who need an on-screen indicator of persona/mic state that matches their brand kit.
+2. **Product teams running UX reviews** that require repeated, predictable setups (e.g., dark high-contrast layout, specific tone prompts) to evaluate responses apples-to-apples.
+3. **Educators or facilitators** who want preset personas for each cohort (helper, challenger, explainer) and an overlay that keeps students oriented.
+4. **Accessibility and focus workflows** where quick keyboard cycling between distraction-free and information-dense layouts helps users stay in flow.
+5. **Voice-first prototypers** crafting multivoice experiences who need to validate both the audio selection (`Mic:`, `defaultVoice`) and the accompanying visual state without touching the DOM by hand.
+
 ### Features Implemented (Phase 1)
 
 - Persona-driven theming with preset palettes.
