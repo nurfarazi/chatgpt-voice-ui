@@ -1,29 +1,68 @@
 :root {
-  --codex-bg: #0f172a;
-  --codex-fg: #f8fafc;
-  --codex-accent: #38bdf8;
-  --codex-muted: #1e293b;
+  --codex-bg: #020617;
+  --codex-fg: #f4f5fb;
+  --codex-accent: #60f6ff;
+  --codex-muted: #1b243c;
   --codex-font-family: 'Inter', system-ui, sans-serif;
   --codex-font-size: 15px;
   --codex-line-height: 1.6;
   --codex-letter-spacing: 0.01em;
-  --codex-border-radius: 12px;
-  --codex-gutter: 18px;
-  --codex-input-height: 54px;
-  --codex-sidebar-width: 240px;
-  --codex-background-type: color;
-  --codex-background-value: #0f172a;
-  --codex-background-blur: 0px;
+  --codex-border-radius: 18px;
+  --codex-gutter: 20px;
+  --codex-input-height: 58px;
+  --codex-sidebar-width: 260px;
+  --codex-background-type: gradient;
+  --codex-background-value: linear-gradient(135deg, #020617 0%, #0f172a 40%, #312e81 100%);
+  --codex-background-blur: 12px;
   --codex-background-opacity: 1;
+  --codex-surface: rgba(8, 18, 46, 0.65);
+  --codex-surface-strong: rgba(8, 18, 46, 0.85);
+  --codex-surface-muted: rgba(15, 23, 42, 0.45);
+  --codex-border: rgba(124, 146, 205, 0.35);
+  --codex-border-strong: rgba(96, 246, 255, 0.55);
+  --codex-glow: rgba(96, 246, 255, 0.35);
+  --codex-purple: #a78bfa;
+  --codex-gradient-accent: linear-gradient(120deg, #5ef3ff, #8b5cf6 45%, #f472b6 100%);
+  --codex-gradient-muted: linear-gradient(120deg, rgba(7, 17, 43, 0.8), rgba(9, 9, 17, 0.9));
+  --codex-text-dim: rgba(244, 245, 251, 0.7);
+  --codex-shadow-soft: 0 20px 60px -35px rgba(5, 6, 16, 0.9);
+  --codex-ring: 0 0 0 1px rgba(94, 243, 255, 0.4), 0 10px 30px -20px rgba(94, 243, 255, 0.8);
 }
 
 html.codex-theme-active body {
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
   background: var(--codex-background-value);
   color: var(--codex-fg);
   font-family: var(--codex-font-family);
   font-size: var(--codex-font-size);
   line-height: var(--codex-line-height);
   letter-spacing: var(--codex-letter-spacing);
+  overflow-x: hidden;
+}
+
+html.codex-theme-active body::before,
+html.codex-theme-active body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+}
+
+html.codex-theme-active body::before {
+  background: radial-gradient(circle at 20% 20%, rgba(96, 246, 255, 0.25), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(167, 139, 250, 0.25), transparent 35%),
+    radial-gradient(circle at 50% 70%, rgba(244, 114, 182, 0.2), transparent 45%);
+  filter: blur(40px);
+  opacity: 0.9;
+}
+
+html.codex-theme-active body::after {
+  background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0px, transparent 4px);
+  mix-blend-mode: screen;
+  opacity: 0.4;
 }
 
 html.codex-theme-active body * {
@@ -31,10 +70,50 @@ html.codex-theme-active body * {
   letter-spacing: inherit;
 }
 
+html.codex-theme-active ::selection {
+  background: rgba(94, 243, 255, 0.35);
+  color: var(--codex-fg);
+}
+
+html.codex-theme-active ::-webkit-scrollbar {
+  width: 10px;
+}
+
+html.codex-theme-active ::-webkit-scrollbar-track {
+  background: rgba(3, 4, 12, 0.8);
+}
+
+html.codex-theme-active ::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(94, 243, 255, 0.7), rgba(167, 139, 250, 0.65));
+  border: 2px solid rgba(3, 4, 12, 0.9);
+}
+
 html.codex-theme-active [data-testid='left-nav'],
 html.codex-theme-active nav[aria-label='ChatGPT sidebar'],
 html.codex-theme-active aside {
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  width: var(--codex-sidebar-width);
+  background: var(--codex-surface);
+  border: 1px solid var(--codex-border);
+  border-radius: calc(var(--codex-border-radius) + 6px);
+  padding: calc(var(--codex-gutter) * 0.75);
+  margin: calc(var(--codex-gutter) * 0.75);
+  box-shadow: var(--codex-shadow-soft);
+  backdrop-filter: blur(var(--codex-background-blur));
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s ease, opacity 0.35s ease, box-shadow 0.35s ease;
+}
+
+html.codex-theme-active [data-testid='left-nav']::after,
+html.codex-theme-active nav[aria-label='ChatGPT sidebar']::after,
+html.codex-theme-active aside::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(94, 243, 255, 0.12), transparent 45%),
+    linear-gradient(-40deg, rgba(167, 139, 250, 0.1), transparent 55%);
+  pointer-events: none;
 }
 
 html[data-codex-sidebar-collapsed] .grid > aside,
@@ -43,27 +122,318 @@ html[data-codex-sidebar-collapsed] nav[aria-label='ChatGPT sidebar'],
 html[data-codex-sidebar-collapsed] aside {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-20px);
+  transform: translateX(-24px);
+}
+
+html.codex-theme-active main,
+html.codex-theme-active [data-testid='chat-container'] {
+  padding: calc(var(--codex-gutter) * 1.25) calc(var(--codex-gutter) * 0.9);
 }
 
 html.codex-theme-active [data-testid='conversation-turns'] {
-  backdrop-filter: blur(var(--codex-background-blur));
+  backdrop-filter: blur(calc(var(--codex-background-blur) * 1.2));
+  background: var(--codex-surface);
+  border-radius: calc(var(--codex-border-radius) * 1.8);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: calc(var(--codex-gutter) * 1.2);
+  box-shadow: var(--codex-shadow-soft);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+html.codex-theme-active [data-testid='conversation-turns']::before {
+  content: '';
+  position: absolute;
+  inset: 12% 0 0;
+  background: radial-gradient(circle at 65% 20%, rgba(94, 243, 255, 0.35), transparent 60%);
+  opacity: 0.5;
+  filter: blur(30px);
+  pointer-events: none;
+  z-index: -1;
 }
 
 html.codex-theme-active [data-testid='conversation-turns'] > div {
-  border-radius: var(--codex-border-radius);
+  border-radius: calc(var(--codex-border-radius) * 1.5);
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] {
+  background: var(--codex-surface-strong);
+  border-radius: calc(var(--codex-border-radius) * 1.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 22px 26px;
+  box-shadow: 0 12px 24px -22px rgba(0, 0, 0, 0.9);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+html.codex-theme-active [data-testid='conversation-turn']:hover {
+  transform: translateY(-2px);
+  border-color: rgba(94, 243, 255, 0.35);
+  background: rgba(6, 14, 36, 0.9);
+}
+
+html.codex-theme-active [data-testid='conversation-turn'][data-message-author-role='user'] {
+  background: linear-gradient(135deg, rgba(9, 14, 40, 0.92), rgba(30, 64, 175, 0.75));
+  border: 1px solid rgba(94, 243, 255, 0.35);
+  box-shadow: 0 10px 30px -18px rgba(15, 23, 42, 0.9);
+}
+
+html.codex-theme-active
+  [data-testid='conversation-turn'][data-message-author-role='assistant']::before,
+html.codex-theme-active [data-testid='conversation-turn'][data-message-author-role='user']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(94, 243, 255, 0.2), transparent 60%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] header,
+html.codex-theme-active [data-testid='conversation-turn'] footer {
+  color: var(--codex-text-dim);
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] p,
+html.codex-theme-active [data-testid='conversation-turn'] li {
+  color: var(--codex-fg);
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] blockquote {
+  border-left: 3px solid var(--codex-border-strong);
+  padding-left: 16px;
+  margin-left: 8px;
+  color: var(--codex-text-dim);
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] code {
+  background: rgba(8, 19, 48, 0.8);
+  border-radius: 8px;
+  padding: 2px 6px;
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] pre {
+  background: rgba(3, 8, 24, 0.92);
+  border-radius: calc(var(--codex-border-radius) * 0.9);
+  border: 1px solid rgba(94, 243, 255, 0.12);
+  padding: 16px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.55);
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] pre code {
+  background: transparent;
+  padding: 0;
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] a {
+  color: var(--codex-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] a:hover {
+  text-decoration: underline;
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] ul,
+html.codex-theme-active [data-testid='conversation-turn'] ol {
+  padding-left: 20px;
+}
+
+html.codex-theme-active [data-testid='conversation-turn'] ::marker {
+  color: var(--codex-accent);
 }
 
 html.codex-theme-active textarea,
 html.codex-theme-active [role='textbox'] {
   min-height: var(--codex-input-height) !important;
-  border-radius: calc(var(--codex-border-radius) - 4px) !important;
+  border-radius: calc(var(--codex-border-radius) * 2) !important;
+  border: none !important;
+  padding: 14px 22px !important;
+  background: transparent !important;
+  color: var(--codex-fg) !important;
+  resize: none !important;
+}
+
+html.codex-theme-active textarea::placeholder,
+html.codex-theme-active [role='textbox']::placeholder {
+  color: rgba(244, 245, 251, 0.45);
 }
 
 html.codex-theme-active button {
-  border-radius: calc(var(--codex-border-radius) - 6px) !important;
+  border-radius: 999px !important;
+  background: var(--codex-gradient-muted);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--codex-fg);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+html.codex-theme-active button:hover:not(:disabled) {
+  background: var(--codex-gradient-accent);
+  color: #050609;
+  box-shadow: 0 15px 35px -22px rgba(94, 243, 255, 0.8);
+  transform: translateY(-1px);
+}
+
+html.codex-theme-active button:focus-visible {
+  outline: none;
+  box-shadow: var(--codex-ring);
+}
+
+html.codex-theme-active button[aria-pressed='true'],
+html.codex-theme-active button.active {
+  background: var(--codex-gradient-accent);
+  color: #050609;
+  border-color: transparent !important;
 }
 
 html.codex-theme-active .sticky.bottom-0 {
-  padding-bottom: calc(var(--codex-gutter) * 1.5);
+  padding: calc(var(--codex-gutter)) calc(var(--codex-gutter) * 1.5) calc(var(--codex-gutter) * 1.8);
+}
+
+html.codex-theme-active .sticky.bottom-0 > div {
+  background: rgba(5, 9, 24, 0.85);
+  border-radius: calc(var(--codex-border-radius) * 1.5);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: var(--codex-shadow-soft);
+  padding: 18px;
+  backdrop-filter: blur(calc(var(--codex-background-blur) * 1.2));
+  position: relative;
+  overflow: hidden;
+}
+
+html.codex-theme-active .sticky.bottom-0 > div::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(94, 243, 255, 0.08), transparent 50%);
+  pointer-events: none;
+}
+
+html.codex-theme-active .sticky.bottom-0 form {
+  background: rgba(4, 10, 32, 0.8);
+  border-radius: calc(var(--codex-border-radius) * 2);
+  border: 1px solid rgba(94, 243, 255, 0.18);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+html.codex-theme-active .sticky.bottom-0 form button {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html.codex-theme-active .sticky.bottom-0 form button svg {
+  stroke: currentColor;
+}
+
+html.codex-theme-active [data-testid='prompt-button'] {
+  border-radius: 999px;
+  border: 1px solid rgba(94, 243, 255, 0.25);
+  background: rgba(11, 29, 74, 0.8);
+  padding: 10px 16px;
+  color: var(--codex-text-dim);
+  font-size: 0.9rem;
+}
+
+html.codex-theme-active [data-testid='prompt-button']:hover {
+  color: var(--codex-fg);
+}
+
+html.codex-theme-active [data-testid='prompt-library'] {
+  border-radius: calc(var(--codex-border-radius) * 1.1);
+  border: 1px solid rgba(94, 243, 255, 0.22);
+  background: rgba(3, 8, 24, 0.7);
+  backdrop-filter: blur(calc(var(--codex-background-blur) * 0.8));
+}
+
+html.codex-theme-active [data-testid='prompt-library'] button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+}
+
+html.codex-theme-active [data-testid='prompt-suggestions'] {
+  display: grid;
+  gap: 10px;
+}
+
+html.codex-theme-active [data-testid='prompt-suggestions'] button {
+  border-radius: calc(var(--codex-border-radius) * 1.2);
+  background: rgba(6, 14, 34, 0.85);
+  border: 1px solid rgba(94, 243, 255, 0.2) !important;
+  justify-content: flex-start;
+  padding: 14px 18px;
+  text-align: left;
+}
+
+html.codex-theme-active [data-testid='prompt-suggestions'] button:hover {
+  background: rgba(6, 14, 34, 1);
+}
+
+html.codex-theme-active .sticky.top-0,
+html.codex-theme-active header,
+html.codex-theme-active [data-testid='top-nav'] {
+  background: rgba(3, 5, 18, 0.85) !important;
+  border-bottom: 1px solid rgba(94, 243, 255, 0.12);
+  box-shadow: 0 20px 60px -40px rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(calc(var(--codex-background-blur) * 1.2));
+}
+
+html.codex-theme-active [data-testid='top-nav'] button,
+html.codex-theme-active [data-testid='top-nav'] a {
+  border-radius: 999px;
+  padding: 8px 14px;
+}
+
+html.codex-theme-active [data-testid='gpt-selector'] {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(7, 11, 26, 0.8);
+  padding: 8px 16px;
+}
+
+html.codex-theme-active table {
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: calc(var(--codex-border-radius) * 0.9);
+  overflow: hidden;
+}
+
+html.codex-theme-active table th,
+html.codex-theme-active table td {
+  border: 1px solid rgba(94, 243, 255, 0.12);
+  padding: 12px 14px;
+}
+
+html.codex-theme-active table th {
+  background: rgba(7, 18, 48, 0.8);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+html.codex-theme-active table tr:nth-child(even) td {
+  background: rgba(4, 9, 26, 0.7);
+}
+
+html.codex-theme-active kbd {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 3px 8px;
+  background: rgba(2, 6, 23, 0.65);
+  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.08);
+}
+
+html.codex-theme-active .text-muted,
+html.codex-theme-active [data-testid='conversation-turn'] .text-token-text-secondary {
+  color: var(--codex-text-dim);
 }
