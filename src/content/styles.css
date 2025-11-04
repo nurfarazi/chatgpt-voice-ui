@@ -89,9 +89,7 @@ html.codex-theme-active ::-webkit-scrollbar-thumb {
   border: 2px solid rgba(3, 4, 12, 0.9);
 }
 
-html.codex-theme-active [data-testid='left-nav'],
-html.codex-theme-active nav[aria-label='ChatGPT sidebar'],
-html.codex-theme-active aside {
+html.codex-theme-active :is([data-testid='left-nav'], nav[aria-label='ChatGPT sidebar']) {
   width: var(--codex-sidebar-width);
   background: var(--codex-surface);
   border: 1px solid var(--codex-border);
@@ -103,23 +101,20 @@ html.codex-theme-active aside {
   position: relative;
   overflow: hidden;
   transition: transform 0.35s ease, opacity 0.35s ease, box-shadow 0.35s ease;
+  z-index: 0;
 }
 
-html.codex-theme-active [data-testid='left-nav']::after,
-html.codex-theme-active nav[aria-label='ChatGPT sidebar']::after,
-html.codex-theme-active aside::after {
+html.codex-theme-active :is([data-testid='left-nav'], nav[aria-label='ChatGPT sidebar'])::after {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(160deg, rgba(94, 243, 255, 0.12), transparent 45%),
     linear-gradient(-40deg, rgba(167, 139, 250, 0.1), transparent 55%);
   pointer-events: none;
+  z-index: -1;
 }
 
-html[data-codex-sidebar-collapsed] .grid > aside,
-html[data-codex-sidebar-collapsed] [data-testid='left-nav'],
-html[data-codex-sidebar-collapsed] nav[aria-label='ChatGPT sidebar'],
-html[data-codex-sidebar-collapsed] aside {
+html[data-codex-sidebar-collapsed] :is([data-testid='left-nav'], nav[aria-label='ChatGPT sidebar']) {
   opacity: 0;
   pointer-events: none;
   transform: translateX(-24px);
