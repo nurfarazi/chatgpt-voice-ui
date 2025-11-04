@@ -4,6 +4,10 @@ import { crx } from '@crxjs/vite-plugin';
 
 import manifest from './src/manifest';
 
+const DEV_HOST = process.env.HMR_HOST ?? 'localhost';
+const DEV_PORT = Number(process.env.HMR_PORT ?? 5173);
+const DEV_PROTOCOL = process.env.HMR_PROTOCOL ?? 'ws';
+
 export default defineConfig({
   plugins: [
     react(),
@@ -25,7 +29,20 @@ export default defineConfig({
     },
   },
   server: {
-    hmr: false,
+    host: DEV_HOST,
+    strictPort: true,
+    hmr: {
+      host: DEV_HOST,
+      clientHost: DEV_HOST,
+      port: DEV_PORT,
+      clientPort: DEV_PORT,
+      protocol: DEV_PROTOCOL,
+    },
+    origin: `${DEV_PROTOCOL}://${DEV_HOST}:${DEV_PORT}`,
+    port: DEV_PORT,
+    watch: {
+      usePolling: process.env.HMR_USE_POLLING === 'true',
+    },
     cors: {
       origin: '*',
       methods: ['GET', 'OPTIONS'],

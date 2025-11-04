@@ -6,6 +6,7 @@ import { applyThemeToDocument, resolveTheme } from '../libs/themes';
 import { getState } from '../libs/storage';
 import type { Persona, StorageSchema } from '../types/storage';
 import type { RuntimeMessage } from '../types/messages';
+import { initializeChatListControls } from './chatListControls';
 
 const CODex_ACTIVE_CLASS = 'codex-theme-active';
 const OVERLAY_HOST_ID = 'codex-overlay-host';
@@ -158,6 +159,7 @@ const observeChatRoot = () => {
 const bootstrap = async () => {
   try {
     observeChatRoot();
+    initializeChatListControls();
     await syncState();
     chrome.runtime.onMessage.addListener((message: RuntimeMessage) => {
       void handleRuntimeMessage(message);

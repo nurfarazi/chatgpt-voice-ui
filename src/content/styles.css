@@ -432,3 +432,51 @@ html.codex-theme-active .text-muted,
 html.codex-theme-active [data-testid='conversation-turn'] .text-token-text-secondary {
   color: var(--codex-text-dim);
 }
+
+[data-codex-chat-delete='true'] {
+  position: relative;
+}
+
+.codex-chat-delete-button {
+  appearance: none;
+  border: 1px solid rgba(94, 243, 255, 0.24);
+  background: rgba(6, 14, 34, 0.7);
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  color: var(--codex-text-dim, #94a3b8);
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+  opacity: 0;
+  margin-right: 6px;
+}
+
+[data-codex-chat-delete='true']:hover .codex-chat-delete-button,
+.codex-chat-delete-button:focus-visible {
+  opacity: 1;
+}
+
+.codex-chat-delete-button:hover {
+  color: var(--codex-fg, #f8fafc);
+  background: rgba(14, 22, 56, 0.85);
+  border-color: rgba(94, 243, 255, 0.38);
+}
+
+.codex-chat-delete-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.codex-chat-delete-button[data-codex-delete-state='pending'] {
+  cursor: progress;
+}
+
+.codex-chat-delete-button[data-codex-delete-state='error'] {
+  border-color: rgba(248, 113, 113, 0.7);
+  color: rgba(248, 113, 113, 0.9);
+  opacity: 1;
+}

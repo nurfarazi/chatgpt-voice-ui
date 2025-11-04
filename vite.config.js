@@ -24,6 +24,11 @@ export default defineConfig({
     },
     server: {
         hmr: false,
+        cors: {
+            origin: '*',
+            methods: ['GET', 'OPTIONS'],
+            allowedHeaders: ['*'],
+        },
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, OPTIONS',
