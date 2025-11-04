@@ -1,11 +1,11 @@
 .codex-overlay {
-  background: rgba(15, 23, 42, 0.92);
+  background: linear-gradient(140deg, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.78));
   color: #f8fafc;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 20px 35px -20px rgba(15, 23, 42, 0.6);
-  width: 260px;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 18px;
+  box-shadow: 0 26px 60px -28px rgba(15, 23, 42, 0.75), inset 0 1px 0 rgba(248, 250, 252, 0.04);
+  width: 320px;
   font-family: var(--codex-font-family, 'Inter', system-ui, sans-serif);
   pointer-events: auto;
 }
@@ -33,9 +33,9 @@
 }
 
 .codex-overlay__body {
-  padding: 0 12px 16px;
+  padding: 0 16px 18px;
   display: grid;
-  gap: 12px;
+  gap: 18px;
 }
 
 .codex-overlay__personas {
@@ -75,6 +75,250 @@
   opacity: 0.7;
 }
 
+.codex-overlay__voice-card {
+  --voice-card-primary: rgba(56, 189, 248, 0.55);
+  --voice-card-secondary: rgba(129, 140, 248, 0.35);
+  --voice-card-border: rgba(56, 189, 248, 0.35);
+  position: relative;
+  border-radius: 20px;
+  padding: 18px;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.75));
+  border: 1px solid var(--voice-card-border);
+  box-shadow: inset 0 1px 0 rgba(248, 250, 252, 0.08), 0 18px 40px -28px rgba(56, 189, 248, 0.6);
+  overflow: hidden;
+  display: grid;
+  gap: 16px;
+  isolation: isolate;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.codex-overlay__voice-card::before {
+  content: '';
+  position: absolute;
+  inset: -60% -20% auto -20%;
+  height: 160%;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3), transparent 60%);
+  opacity: 0.55;
+  filter: blur(0.5px);
+  transform: rotate(8deg);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.codex-overlay__voice-card::after {
+  content: '';
+  position: absolute;
+  inset: auto -40% -50% -40%;
+  height: 120%;
+  background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.3), transparent 70%);
+  opacity: 0.6;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.codex-overlay__voice-card--listening {
+  --voice-card-primary: rgba(16, 185, 129, 0.7);
+  --voice-card-secondary: rgba(56, 189, 248, 0.5);
+  --voice-card-border: rgba(16, 185, 129, 0.55);
+  background: linear-gradient(150deg, rgba(17, 24, 39, 0.9), rgba(6, 95, 70, 0.82));
+  box-shadow: inset 0 1px 0 rgba(167, 243, 208, 0.12), 0 22px 46px -28px rgba(16, 185, 129, 0.65);
+}
+
+.codex-overlay__voice-card--responding {
+  --voice-card-primary: rgba(129, 140, 248, 0.7);
+  --voice-card-secondary: rgba(248, 113, 113, 0.55);
+  --voice-card-border: rgba(129, 140, 248, 0.55);
+  background: linear-gradient(150deg, rgba(30, 27, 75, 0.92), rgba(76, 29, 149, 0.78));
+  box-shadow: inset 0 1px 0 rgba(224, 231, 255, 0.14), 0 26px 52px -30px rgba(129, 140, 248, 0.7);
+}
+
+.codex-overlay__voice-display {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.codex-overlay__voice-orb {
+  width: 88px;
+  height: 88px;
+  border-radius: 999px;
+  border: none;
+  padding: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.85), var(--voice-card-primary));
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 0 40px -18px var(--voice-card-primary), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.codex-overlay__voice-orb:focus-visible {
+  outline: 2px solid rgba(248, 250, 252, 0.9);
+  outline-offset: 4px;
+}
+
+.codex-overlay__voice-orb:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 54px -20px var(--voice-card-primary), 0 0 0 1px rgba(248, 250, 252, 0.16);
+}
+
+.codex-overlay__voice-orb-glow,
+.codex-overlay__voice-orb-core {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.codex-overlay__voice-orb-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8), transparent 60%);
+  mix-blend-mode: screen;
+  animation: codex-voice-orb-pulse 4s ease-in-out infinite;
+}
+
+.codex-overlay__voice-orb-core {
+  inset: 20%;
+  background: radial-gradient(circle at 30% 30%, rgba(248, 250, 252, 0.9), rgba(15, 23, 42, 0.3));
+  box-shadow: inset 0 0 16px rgba(15, 23, 42, 0.2);
+}
+
+.codex-overlay__voice-ring {
+  position: absolute;
+  left: -12px;
+  bottom: -18px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 1px solid rgba(248, 250, 252, 0.12);
+  opacity: 0.35;
+  transform-origin: center;
+  animation: codex-voice-ring 8s linear infinite;
+}
+
+.codex-overlay__voice-bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 4px;
+  height: 54px;
+  padding-right: 6px;
+}
+
+.codex-overlay__voice-bar {
+  width: 6px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.9), rgba(148, 163, 184, 0.2));
+  transform: scaleY(var(--voice-level, 0.35));
+  transform-origin: bottom center;
+  transition: transform 0.15s ease;
+  box-shadow: 0 2px 8px -4px rgba(15, 23, 42, 0.55);
+}
+
+.codex-overlay__voice-card--listening .codex-overlay__voice-bar {
+  background: linear-gradient(180deg, rgba(225, 252, 244, 0.92), rgba(52, 211, 153, 0.4));
+}
+
+.codex-overlay__voice-card--responding .codex-overlay__voice-bar {
+  background: linear-gradient(180deg, rgba(224, 231, 255, 0.92), rgba(99, 102, 241, 0.4));
+}
+
+.codex-overlay__voice-info {
+  display: grid;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.codex-overlay__voice-title {
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.codex-overlay__voice-status {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-shadow: 0 6px 18px rgba(15, 23, 42, 0.6);
+}
+
+.codex-overlay__voice-hint {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.codex-overlay__voice-actions {
+  display: flex;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.codex-overlay__voice-button {
+  flex: 1;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font: inherit;
+  background: linear-gradient(135deg, var(--voice-card-primary), var(--voice-card-secondary));
+  color: inherit;
+  cursor: pointer;
+  box-shadow: 0 12px 24px -18px rgba(15, 23, 42, 0.8);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+
+.codex-overlay__voice-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px -22px rgba(15, 23, 42, 0.85);
+}
+
+.codex-overlay__voice-button:focus-visible {
+  outline: 2px solid rgba(248, 250, 252, 0.9);
+  outline-offset: 3px;
+}
+
+.codex-overlay__voice-button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.codex-overlay__voice-button--ghost {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(248, 250, 252, 0.18);
+  box-shadow: none;
+}
+
+.codex-overlay__voice-button--ghost:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.codex-overlay__voice-card--idle .codex-overlay__voice-orb::after,
+.codex-overlay__voice-card--listening .codex-overlay__voice-orb::after,
+.codex-overlay__voice-card--responding .codex-overlay__voice-orb::after {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.35), transparent 66%);
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+
+.codex-overlay__voice-card--listening .codex-overlay__voice-orb {
+  animation: codex-voice-orb-hover 4s ease-in-out infinite;
+}
+
+.codex-overlay__voice-card--responding .codex-overlay__voice-status {
+  animation: codex-voice-text-fade 2.4s ease-in-out infinite;
+}
+
+.codex-overlay__voice-card--responding .codex-overlay__voice-ring {
+  animation-duration: 5s;
+}
+
 .codex-overlay__actions {
   display: flex;
   gap: 8px;
@@ -94,4 +338,51 @@
 
 .codex-overlay__action:hover {
   border-color: var(--codex-accent, #38bdf8);
+}
+
+@keyframes codex-voice-orb-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.95;
+  }
+}
+
+@keyframes codex-voice-orb-hover {
+  0%,
+  100% {
+    transform: scale(1.02);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes codex-voice-ring {
+  0% {
+    transform: scale(0.94) rotate(0deg);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.02) rotate(180deg);
+    opacity: 0.35;
+  }
+  100% {
+    transform: scale(0.94) rotate(360deg);
+    opacity: 0.15;
+  }
+}
+
+@keyframes codex-voice-text-fade {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.65;
+  }
 }
