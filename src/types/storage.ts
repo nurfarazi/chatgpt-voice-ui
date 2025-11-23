@@ -29,6 +29,11 @@ export type ThemeBackground = {
   opacity?: number;
 };
 
+export type ThemeVoice = {
+  visualizerStyle: 'wave' | 'ring' | 'bars';
+  micPosition: 'bottom-left' | 'bottom-right' | 'center';
+};
+
 export type ThemePalette = {
   id: string;
   name: string;
@@ -36,6 +41,7 @@ export type ThemePalette = {
   typography: ThemeTypography;
   spacing: ThemeSpacing;
   background: ThemeBackground;
+  voice: ThemeVoice;
   metadata?: {
     createdAt: number;
     updatedAt: number;

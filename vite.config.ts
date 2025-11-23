@@ -29,29 +29,12 @@ export default defineConfig({
     },
   },
   server: {
-    host: DEV_HOST,
+    port: 5173,
     strictPort: true,
     hmr: {
-      host: DEV_HOST,
-      clientHost: DEV_HOST,
-      port: DEV_PORT,
-      clientPort: DEV_PORT,
-      protocol: DEV_PROTOCOL,
-    },
-    origin: `${DEV_PROTOCOL}://${DEV_HOST}:${DEV_PORT}`,
-    port: DEV_PORT,
-    watch: {
-      usePolling: process.env.HMR_USE_POLLING === 'true',
-    },
-    cors: {
-      origin: '*',
-      methods: ['GET', 'OPTIONS'],
-      allowedHeaders: ['*'],
-    },
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': '*',
+      host: 'localhost',
+      port: 5173,
+      clientPort: 5173,
     },
   },
 });

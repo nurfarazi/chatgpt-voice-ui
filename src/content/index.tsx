@@ -57,10 +57,14 @@ const renderOverlay = () => {
 
   const { root } = ensureOverlayMount();
 
+  const persona = stateCache.activePersonaId ? stateCache.personas[stateCache.activePersonaId] : null;
+  const activeTheme = persona ? resolveTheme(stateCache.themes, persona.themeId) : null;
+
   root.render(
     <OverlayApp
       activePersonaId={stateCache.activePersonaId}
       personas={getPersonas()}
+      activeTheme={activeTheme}
       onClose={() => toggleOverlay(false)}
       onPersonaSelect={(personaId) => {
         void chrome.runtime.sendMessage({ type: 'SET_ACTIVE_PERSONA', personaId });

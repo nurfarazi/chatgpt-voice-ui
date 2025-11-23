@@ -47,6 +47,10 @@ export const themePresets: ThemePalette[] = [
       blur: 0,
       opacity: 1,
     },
+    voice: {
+      visualizerStyle: 'bars',
+      micPosition: 'bottom-right',
+    },
     metadata: {
       createdAt: now(),
       updatedAt: now(),
@@ -78,6 +82,10 @@ export const themePresets: ThemePalette[] = [
       value: 'linear-gradient(135deg, rgba(17,24,39,0.95) 0%, rgba(76,29,149,0.85) 100%)',
       blur: 8,
       opacity: 0.95,
+    },
+    voice: {
+      visualizerStyle: 'wave',
+      micPosition: 'bottom-right',
     },
     metadata: {
       createdAt: now(),
@@ -111,6 +119,10 @@ export const themePresets: ThemePalette[] = [
       value: '#ffffff',
       blur: 0,
       opacity: 1,
+    },
+    voice: {
+      visualizerStyle: 'ring',
+      micPosition: 'bottom-right',
     },
     metadata: {
       createdAt: now(),

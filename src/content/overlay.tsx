@@ -1,11 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import type { Persona } from '../types/storage';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { ThemeSelector } from './ThemeSelector';
+import type { Persona, ThemePalette } from '../types/storage';
+import { AudioAnalyzer } from '../libs/voice';
 
 type VoiceMode = 'idle' | 'listening' | 'responding';
 
 type OverlayProps = {
   personas: Persona[];
   activePersonaId: string | null;
+  activeTheme: ThemePalette | null;
   sidebarCollapsed: boolean;
   onPersonaSelect: (personaId: string) => void;
   onSidebarToggle: () => void;
@@ -15,56 +18,69 @@ type OverlayProps = {
 const OverlayApp: React.FC<OverlayProps> = ({
   personas,
   activePersonaId,
+  activeTheme,
   sidebarCollapsed,
   onPersonaSelect,
   onSidebarToggle,
   onClose,
 }) => {
   const [voiceMode, setVoiceMode] = useState<VoiceMode>('idle');
-  const [levels, setLevels] = useState<number[]>(() => Array.from({ length: 7 }, (_, index) => 0.2 + index * 0.03));
+  const [levels, setLevels] = useState<number[]>(() => Array(7).fill(0.1));
+  const analyzerRef = useRef<AudioAnalyzer | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   const activePersona = useMemo(
     () => personas.find((persona) => persona.id === activePersonaId) ?? null,
     [activePersonaId, personas],
   );
 
+  const visualizerStyle = activeTheme?.voice.visualizerStyle ?? 'bars';
+
   useEffect(() => {
-    if (voiceMode !== 'listening') {
-      setLevels((previous) =>
-        previous.map((_, index) => (voiceMode === 'responding' ? 0.7 - index * 0.07 : 0.18 + index * 0.02)),
-      );
-      return;
-    }
-
-    let timeoutId: ReturnType<typeof setTimeout> | undefined;
-
-    const animate = () => {
-      setLevels((prev) => prev.map(() => 0.25 + Math.random() * 0.75));
-      timeoutId = setTimeout(animate, 140 + Math.random() * 140);
-    };
-
-    animate();
-
     return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
+      if (analyzerRef.current) {
+        analyzerRef.current.stop();
+      }
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [voiceMode]);
+  }, []);
 
   useEffect(() => {
-    if (voiceMode !== 'responding') {
-      return;
+    if (voiceMode === 'listening') {
+      const startListening = async () => {
+        if (!analyzerRef.current) {
+          analyzerRef.current = new AudioAnalyzer();
+        }
+        try {
+          await analyzerRef.current.start();
+          
+          const animate = () => {
+            if (analyzerRef.current) {
+              const newLevels = analyzerRef.current.getLevels(visualizerStyle === 'wave' ? 32 : 7);
+              setLevels(newLevels);
+            }
+            animationFrameRef.current = requestAnimationFrame(animate);
+          };
+          animate();
+        } catch (error) {
+          console.error('Failed to start audio analyzer', error);
+          setVoiceMode('idle');
+        }
+      };
+      void startListening();
+    } else {
+      if (analyzerRef.current) {
+        analyzerRef.current.stop();
+      }
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      // Reset levels
+      setLevels(Array(visualizerStyle === 'wave' ? 32 : 7).fill(0.1));
     }
-
-    const timeoutId = setTimeout(() => {
-      setVoiceMode('idle');
-    }, 3400);
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [voiceMode]);
+  }, [voiceMode, visualizerStyle]);
 
   const voiceStatusText = useMemo(() => {
     const personaName = activePersona?.name ?? 'your muse';
@@ -91,12 +107,8 @@ const OverlayApp: React.FC<OverlayProps> = ({
 
   const cycleVoiceMode = () => {
     setVoiceMode((current) => {
-      if (current === 'idle') {
-        return 'listening';
-      }
-      if (current === 'listening') {
-        return 'responding';
-      }
+      if (current === 'idle') return 'listening';
+      if (current === 'listening') return 'idle'; // Simplified for visualizer demo
       return 'idle';
     });
   };
@@ -107,14 +119,64 @@ const OverlayApp: React.FC<OverlayProps> = ({
 
   const voiceCardClass = `codex-overlay__voice-card codex-overlay__voice-card--${voiceMode}`;
 
+  const renderVisualizer = () => {
+    if (visualizerStyle === 'ring') {
+      // Calculate average level for ring scale
+      const avg = levels.reduce((a, b) => a + b, 0) / levels.length;
+      const scale = 1 + avg * 1.5; // Scale between 1 and 2.5
+      
+      return (
+        <div className="codex-overlay__voice-ring-container">
+           <div 
+             className="codex-overlay__voice-ring-pulse"
+             style={{ transform: `scale(${scale})`, opacity: 0.5 + avg * 0.5 }}
+           />
+           <div className="codex-overlay__voice-orb-core" />
+        </div>
+      );
+    }
+
+    if (visualizerStyle === 'wave') {
+       return (
+         <div className="codex-overlay__voice-wave">
+           {levels.map((level, i) => (
+             <div 
+               key={i} 
+               className="codex-overlay__voice-wave-bar"
+               style={{ 
+                 height: `${level * 100}%`,
+                 opacity: 0.3 + level * 0.7 
+               }} 
+             />
+           ))}
+         </div>
+       );
+    }
+
+    // Default 'bars'
+    return (
+      <div className="codex-overlay__voice-bars" aria-hidden="true">
+        {levels.map((level, index) => (
+          <span
+            key={`voice-bar-${index}`}
+            className="codex-overlay__voice-bar"
+            style={{ '--voice-level': level } as React.CSSProperties}
+          />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="codex-overlay" role="dialog" aria-label="ChatGPT UI personalization controls">
-      <header className="codex-overlay__header">
-        <span className="codex-overlay__title">Personas</span>
-        <button className="codex-overlay__close" onClick={onClose} aria-label="Close personalization overlay">
-          x
-        </button>
-      </header>
+        <header className="codex-overlay__header">
+          <span className="codex-overlay__title">Personas</span>
+          <button className="codex-overlay__close" onClick={onClose} aria-label="Close personalization overlay">
+            x
+          </button>
+        </header>
+        {/* Theme selector */}
+        <ThemeSelector />
       <div className="codex-overlay__body">
         <section className={voiceCardClass} aria-live="polite">
           <div className="codex-overlay__voice-display">
@@ -125,19 +187,16 @@ const OverlayApp: React.FC<OverlayProps> = ({
               aria-label="Toggle voice capture"
               type="button"
             >
-              <span className="codex-overlay__voice-orb-glow" aria-hidden="true" />
-              <span className="codex-overlay__voice-orb-core" aria-hidden="true" />
+              {visualizerStyle !== 'ring' && (
+                <>
+                  <span className="codex-overlay__voice-orb-glow" aria-hidden="true" />
+                  <span className="codex-overlay__voice-orb-core" aria-hidden="true" />
+                </>
+              )}
             </button>
-            <div className="codex-overlay__voice-bars" aria-hidden="true">
-              {levels.map((level, index) => (
-                <span
-                  key={`voice-bar-${index}`}
-                  className="codex-overlay__voice-bar"
-                  style={{ '--voice-level': level } as React.CSSProperties}
-                />
-              ))}
-            </div>
-            <span className="codex-overlay__voice-ring" aria-hidden="true" />
+            
+            {renderVisualizer()}
+
           </div>
           <div className="codex-overlay__voice-info">
             <span className="codex-overlay__voice-title">Interactive Bard</span>
@@ -146,11 +205,7 @@ const OverlayApp: React.FC<OverlayProps> = ({
           </div>
           <div className="codex-overlay__voice-actions">
             <button className="codex-overlay__voice-button" type="button" onClick={cycleVoiceMode}>
-              {voiceMode === 'listening'
-                ? 'Pause listening'
-                : voiceMode === 'responding'
-                  ? 'Interrupt reply'
-                  : 'Begin listening'}
+              {voiceMode === 'listening' ? 'Pause listening' : 'Begin listening'}
             </button>
             <button
               className="codex-overlay__voice-button codex-overlay__voice-button--ghost"
